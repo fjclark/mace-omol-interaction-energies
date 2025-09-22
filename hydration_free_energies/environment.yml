@@ -1,0 +1,26 @@
+name: GNNImplicitSolvent
+channels:
+  - conda-forge
+dependencies:
+  - ipython
+  - python #=3.10
+  - rdkit
+  - pytorch
+  - ca-certificates
+  - openssl
+  - scikit-learn
+  - openff-toolkit
+  - openmmforcefields
+  - certifi
+  - openmm-torch=1.4
+  - openmoltools
+  - h5py
+  - numba
+  - pytorch_geometric
+  - pytorch_cluster
+  - pytorch_scatter
+  - pytorch_sparse
+  - seaborn
+  - nglview
+  - pyemma
+  - openff-toolkit>=0.17.0
