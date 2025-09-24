@@ -14,7 +14,9 @@ KJ_TO_KCAL = 4.184
 ASH_GC_MODEL = "openff-gnn-am1bcc-0.1.0-rc.3.pt"
 
 
-def process_molecule(row_data):
+def process_molecule(
+    row_data: tuple, charge_method: Literal["ASH_GC", "AM1-BCC"] = "ASH_GC"
+) -> dict | None:
     """
     Process a single molecule to calculate solvation and vacuum energies.
 
@@ -25,7 +27,7 @@ def process_molecule(row_data):
 
     Returns:
     --------
-    dict or None
+    dict
         Dictionary with calculated energies or None if processing failed
     """
     idx, row = row_data
@@ -45,11 +47,14 @@ def process_molecule(row_data):
 
     # Get conformation-independent GNN partial charges
     off_mol = Molecule.from_rdkit(mol, allow_undefined_stereo=True)
-    off_mol.assign_partial_charges(
-        partial_charge_method=ASH_GC_MODEL,
-        toolkit_registry=NAGLToolkitWrapper(),
-    )
-    partial_charges = None
+    if charge_method == "AM1-BCC":
+        off_mol.assign_partial_charges(partial_charge_method="am1-bcc")
+    elif charge_method == "ASH_GC":
+        off_mol.assign_partial_charges(
+            partial_charge_method=ASH_GC_MODEL,
+            toolkit_registry=NAGLToolkitWrapper(),
+        )
+    partial_charges = off_mol.partial_charges.m_as("e")
 
     _, energies_sol = minimize_mol(
         mol, "tip3p", constraints=None, partial_charges=partial_charges
@@ -61,9 +66,15 @@ def process_molecule(row_data):
     min_mol.RemoveAllConformers()
     min_mol.AddConformer(conf, assignId=True)
 
-    _, energies_vac = minimize_mol(
-        min_mol, "vac", constraints=None, partial_charges=partial_charges
-    )
+    try:
+        _, energies_vac = minimize_mol(
+            min_mol, "vac", constraints=None, partial_charges=partial_charges
+        )
+
+    except Exception as e:
+        print(f"Failed for {name} ({smiles}): {e}")
+        return None
+
     min_vac = np.min(energies_vac)
 
     return {
@@ -75,10 +86,6 @@ def process_molecule(row_data):
         "min_sol_kjmol": min_sol,
         "min_sol_kcalmol": min_sol / KJ_TO_KCAL,
     }
-
-    # except Exception as e:
-    #     print(f"Failed for {name} ({smiles}): {e}")
-    #     return None
 
 
 def main():
@@ -103,16 +110,16 @@ def main():
 
     # min_dg_hyd_idx = df["experimental_value"].idxmin()
     # df = df.loc[[min_dg_hyd_idx]].reset_index(drop=True)
-    min_dg_hyd = df["experimental_value"].min()
-    max_dg_hyd = df["experimental_value"].max()
-    target_dg_hyd_values = np.linspace(min_dg_hyd, max_dg_hyd, 10)
-    results = []
-    for target_dg_hyd in target_dg_hyd_values:
-        closest_idx = (df["experimental_value"] - target_dg_hyd).abs().idxmin()
-        results.append(df.loc[closest_idx])
+    # min_dg_hyd = df["experimental_value"].min()
+    # max_dg_hyd = df["experimental_value"].max()
+    # target_dg_hyd_values = np.linspace(min_dg_hyd, max_dg_hyd, 10)
+    # results = []
+    # for target_dg_hyd in target_dg_hyd_values:
+    #     closest_idx = (df["experimental_value"] - target_dg_hyd).abs().idxmin()
+    #     results.append(df.loc[closest_idx])
 
     # Filter to unique entries only
-    df = pd.DataFrame(results).reset_index(drop=True)
+    # df = pd.DataFrame(results).reset_index(drop=True)
 
     # Prepare data for parallel processing
     row_data = list(df.iterrows())
