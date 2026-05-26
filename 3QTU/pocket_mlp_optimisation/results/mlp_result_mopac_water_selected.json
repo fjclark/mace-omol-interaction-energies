@@ -1,0 +1,19 @@
+{
+  "auto_model_by_charge": true,
+  "conformer_index": 0,
+  "energy_kcal_per_mol_excluding_restraints": -4814.65366396276,
+  "error_message": null,
+  "formal_charge_e": 0.0,
+  "minimisation_max_iterations": 500,
+  "minimised_sdf_path": "/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/009_CDK2_pocket_results/3QTU/results/best_water_stabilised_mlp_minimised.sdf",
+  "ml_model": "mace-off23-medium",
+  "molecule_index": 0,
+  "n_rotatable_torsions": 6,
+  "openmm_platform": "CPU",
+  "pdb_id": "3QTU",
+  "requested_ml_model": "mace-off23-medium",
+  "restraint_force_constant_kcal_per_mol_rad2": 100000.0,
+  "sdf_path": "/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/009_CDK2_pocket_results/3QTU/results/best_water_stabilised.sdf",
+  "source_type": "mopac_water_optimised_selected",
+  "status": "ok"
+}

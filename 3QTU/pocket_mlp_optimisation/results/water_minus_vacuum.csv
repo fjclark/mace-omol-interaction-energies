@@ -1,0 +1,11 @@
+pdb_id,conformer,water_file,vacuum_file,water_heat_of_formation,vacuum_heat_of_formation,water_minus_vacuum
+3QTU,conf_04,conf_04_water_opt.out,conf_04_water_opt_vacuum_sp.out,-161.39432,-107.87479,-53.51952999999999
+3QTU,conf_07,conf_07_water_opt.out,conf_07_water_opt_vacuum_sp.out,-160.69111,-107.45672,-53.234390000000005
+3QTU,conf_06,conf_06_water_opt.out,conf_06_water_opt_vacuum_sp.out,-161.45792,-108.29335,-53.16457
+3QTU,conf_09,conf_09_water_opt.out,conf_09_water_opt_vacuum_sp.out,-160.87397,-108.06815,-52.80582000000001
+3QTU,conf_03,conf_03_water_opt.out,conf_03_water_opt_vacuum_sp.out,-161.9529,-109.23891,-52.713989999999995
+3QTU,conf_05,conf_05_water_opt.out,conf_05_water_opt_vacuum_sp.out,-161.80309,-109.44251,-52.36058
+3QTU,conf_01,conf_01_water_opt.out,conf_01_water_opt_vacuum_sp.out,-161.92755,-109.99346,-51.93409
+3QTU,conf_02,conf_02_water_opt.out,conf_02_water_opt_vacuum_sp.out,-161.61196,-109.79856,-51.813400000000016
+3QTU,conf_10,conf_10_water_opt.out,conf_10_water_opt_vacuum_sp.out,-161.63734,-109.91118,-51.72615999999999
+3QTU,conf_08,conf_08_water_opt.out,conf_08_water_opt_vacuum_sp.out,-161.42774,-109.73889,-51.68885
