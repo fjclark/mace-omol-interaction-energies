@@ -25,7 +25,8 @@ module load GCC
 # Conda environment
 # ------------------------------------------------------------------
 source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate mace_test_env
+# conda activate mace_test_env
+conda activate mace-omol-updated
 
 # ------------------------------------------------------------------
 # CPU-only settings
@@ -68,8 +69,10 @@ echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}"
 # ------------------------------------------------------------------
 # Paths
 # ------------------------------------------------------------------
-SCRIPT="/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/mopac_mlp_test4.py"
-OUT_DIR="/nobackup/proj/rockhpc_dccadd/ckn/mlp/009cdk2/009-CDK2_batch_results"
+# SCRIPT="/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/mopac_mlp_test4.py"
+SCRIPT = "mopac_mlp_test4.py"
+# OUT_DIR="/nobackup/proj/rockhpc_dccadd/ckn/mlp/009cdk2/009-CDK2_batch_results"
+OUT_DIR"mlp/3QQK"
 
 mkdir -p "${OUT_DIR}"
 
