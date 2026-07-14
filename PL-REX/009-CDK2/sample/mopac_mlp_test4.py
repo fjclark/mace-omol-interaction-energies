@@ -673,7 +673,9 @@ def run_mlp_on_sdf(pdb_id: str, source_type: str, sdf_path: Path, model: Availab
     integrator = openmm.VerletIntegrator(1.0 * openmm.unit.femtosecond)
     platform, platform_properties = select_openmm_platform(platform_name)
     simulation = Simulation(topology, system, integrator, platform, platform_properties)
+    ligand_atoms = list(range(mol.n_atoms))
     reporter = Reporter(ligand_atoms)
+
     try:
         simulation.context.setPositions(cast(Quantity, conformer.to_openmm()))
         simulation.minimizeEnergy(
@@ -907,7 +909,7 @@ def create_mm_system_for_complex(topology: Any, ligand_molecule: Molecule, nonbo
     nb = PME if nonbonded_mode == "PME" else NoCutoff
     kwargs: dict[str, Any] = {
         # "constraints": HBonds,
-        "constrants": None,
+        "constraints": None,
         "rigidWater": True,
         "removeCMMotion": False,
         "nonbondedMethod": nb,
@@ -983,6 +985,7 @@ def run_pocket_mlp_optimisation(
     selected_model = choose_model_for_charge(ligand_molecule, model, auto_model_by_charge)
 
     ligand_atoms = find_ligand_atoms(pdb.topology, ligand_resname)
+    reporter = Reporter(ligand_atoms)
     pocket_atoms = find_pocket_residue_atoms(
         pdb.topology,
         pdb.positions,
@@ -1106,9 +1109,7 @@ def run_pocket_mlp_optimisation(
         # Create the minimisation reporter
         # This is creates an instance of the class: `class Reporter(MinimizationReporter)`
         # The reporter's report() method is called during minimisation.
-        # it can print accepted optimisation iterations and energies.
-        reporter = Reporter()
-        
+        # it can print accepted optimisation iterations and energies.        
         # Print minimisation settings
         print(
             f"[{pdb_id}] Starting minimisation: "
@@ -1123,7 +1124,7 @@ def run_pocket_mlp_optimisation(
             # 100 is quite loose
             tolerance = 1.0 * unit.kilojoules_per_mole / unit.nanometer,
             maxIterations=max_iterations,
-            reporter=Reporter(),
+            reporter=reporter,
         )
 
         # Confirm the minimiser returned
