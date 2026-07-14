@@ -673,12 +673,13 @@ def run_mlp_on_sdf(pdb_id: str, source_type: str, sdf_path: Path, model: Availab
     integrator = openmm.VerletIntegrator(1.0 * openmm.unit.femtosecond)
     platform, platform_properties = select_openmm_platform(platform_name)
     simulation = Simulation(topology, system, integrator, platform, platform_properties)
+    reporter = Reporter(ligand_atoms)
     try:
         simulation.context.setPositions(cast(Quantity, conformer.to_openmm()))
         simulation.minimizeEnergy(
             tolerance=100.0 * unit.kilojoules_per_mole / unit.nanometer,
             maxIterations=max_iterations,
-            reporter=Reporter(),
+            reporter = reporter,
         )
         groups_mask = sum(1 << group for group in range(32) if group != restraint_group)
         state = simulation.context.getState(getEnergy=True, getPositions=True, groups=groups_mask)
@@ -771,7 +772,7 @@ class Reporter(MinimizationReporter):
         # Therefore use direct indexing instead of args.get(...).
         print(iteration, args["system energy"], flush=True)
         return False
-
+    
 
 # -----------------------------
 # Protein-ligand pocket MLP code
