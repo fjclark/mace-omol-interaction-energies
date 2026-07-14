@@ -92,7 +92,7 @@ python -u "${SCRIPT}" \
     --pocket-mode ligand \
     --pocket-cutoff 5.0 \
     --ligand-resname UNL \
-    --max-iterations 20 \
+    --max-iterations 1000 \
     --continue-on-error
 
 echo
