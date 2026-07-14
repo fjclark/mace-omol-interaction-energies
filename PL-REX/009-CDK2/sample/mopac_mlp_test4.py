@@ -731,6 +731,16 @@ class Reporter(MinimizationReporter):
     # `x`: A flat array containing all atom coordinates, like [x1, y1, z1, x2, y2, z2, ...]
     # `grad`
     def report(self, iteration, x, grad, args):
+        self.calls += 1
+
+        # `-1` is the special value means numpy figure out this dimension automatically
+        # `3` means 3 columns request
+        # Example: Numpy sees 12 numbers in total, 3 columns request, then they will calculate 4 row requiered and reshape as (4, 3)
+        coordinates_nm = np.asarray(
+            x,
+            dtype=float,
+        ).reshape(-1, 3)
+
         # args is an OpenMM mapstringdouble object, not a normal Python dict.
         # Therefore use direct indexing instead of args.get(...).
         print(iteration, args["system energy"], flush=True)
