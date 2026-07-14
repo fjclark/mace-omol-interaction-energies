@@ -679,7 +679,7 @@ def run_mlp_on_sdf(pdb_id: str, source_type: str, sdf_path: Path, model: Availab
     try:
         simulation.context.setPositions(cast(Quantity, conformer.to_openmm()))
         simulation.minimizeEnergy(
-            tolerance=100.0 * unit.kilojoules_per_mole / unit.nanometer,
+            tolerance=10.0 * unit.kilojoules_per_mole / unit.nanometer,
             maxIterations=max_iterations,
             reporter = reporter,
         )
@@ -1113,7 +1113,7 @@ def run_pocket_mlp_optimisation(
         # Print minimisation settings
         print(
             f"[{pdb_id}] Starting minimisation: "
-            f"tolerance=1.0 KJ/mol/nm, "
+            f"tolerance=10.0 KJ/mol/nm, "
             f"maxIterations={max_iterations}",
             flush=True,
         )
@@ -1122,7 +1122,7 @@ def run_pocket_mlp_optimisation(
         simulation.minimizeEnergy(
             # tolerance=100.0 * unit.kilojoules_per_mole / unit.nanometer,
             # 100 is quite loose
-            tolerance = 1.0 * unit.kilojoules_per_mole / unit.nanometer,
+            tolerance = 10.0 * unit.kilojoules_per_mole / unit.nanometer,
             maxIterations=max_iterations,
             reporter=reporter,
         )
