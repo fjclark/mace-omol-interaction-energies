@@ -755,6 +755,17 @@ class Reporter(MinimizationReporter):
             axis=1,
         )
 
+        # Save first reported ligand positions
+        # `.copy()` creates an independent Numpy array
+        # This is important because without `.copy()`, the stored array could potentially share memory with another array and change unexpectedly
+        if self.initial_ligand_positions is None:
+            self.initial_ligand_positions = coordinates_nm[self.ligand_atoms].copy()
+
+        # Calculate ligand displacements
+        ligand_displacements_angstrom = np.linalg.norm(
+            
+        )
+
         # args is an OpenMM mapstringdouble object, not a normal Python dict.
         # Therefore use direct indexing instead of args.get(...).
         print(iteration, args["system energy"], flush=True)
