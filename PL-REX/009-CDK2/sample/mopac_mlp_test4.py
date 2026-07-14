@@ -741,6 +741,20 @@ class Reporter(MinimizationReporter):
             dtype=float,
         ).reshape(-1, 3)
 
+        gradient = np.asarray(
+            grad,
+            dtype=float,
+        ).reshape(-1, 3)
+
+
+        ligand_gradient = gradient[self.ligand_atoms]
+
+        # `axis=1` means calculate one norm per row
+        ligand_gradient_norms = np.linalg.norm(
+            ligand_gradient,
+            axis=1,
+        )
+
         # args is an OpenMM mapstringdouble object, not a normal Python dict.
         # Therefore use direct indexing instead of args.get(...).
         print(iteration, args["system energy"], flush=True)
