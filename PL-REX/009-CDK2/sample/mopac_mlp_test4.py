@@ -763,7 +763,8 @@ class Reporter(MinimizationReporter):
 
         # Calculate ligand displacements
         ligand_displacements_angstrom = np.linalg.norm(
-            
+            (coordinates_nm[self.ligand_atoms] - self.initial_ligand_positions) * 10.0,
+            axis=1,
         )
 
         # args is an OpenMM mapstringdouble object, not a normal Python dict.
@@ -904,7 +905,8 @@ def create_mm_system_for_complex(topology: Any, ligand_molecule: Molecule, nonbo
 
     nb = PME if nonbonded_mode == "PME" else NoCutoff
     kwargs: dict[str, Any] = {
-        "constraints": HBonds,
+        # "constraints": HBonds,
+        "constrants": None,
         "rigidWater": True,
         "removeCMMotion": False,
         "nonbondedMethod": nb,
