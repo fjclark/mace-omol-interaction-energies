@@ -1184,24 +1184,33 @@ def run_pocket_mlp_optimisation(
         # This converts the list of pocket atom indices into a NumPy integer array
         pocket_indices = np.asarray(pocket_atoms, dtype=int)
 
-        # Calculate pocket displacement vectors
-        pocket_displacement_vectors_angstrom = (
-            final_positions_nm[pocket_indices] - initial_positions_nm[pocket_indices]
-        ) * 10.0
+        if pocket_indices.size > 0:
+            # Calculate pocket displacement vectors
+            pocket_displacement_vectors_angstrom = (
+                final_positions_nm[pocket_indices] - initial_positions_nm[pocket_indices]
+            ) * 10.0
 
-        # Calculate pocket displacement magnitudes
-        # This returns one movement distance per pocket atom.
-        pocket_displacements_angstrom = np.linalg.norm(
-            pocket_displacement_vectors_angstrom,
-            axis=1,
-        )
+            # Calculate pocket displacement magnitudes
+            # This returns one movement distance per pocket atom.
+            pocket_displacements_angstrom = np.linalg.norm(
+                pocket_displacement_vectors_angstrom,
+                axis=1,
+            )
+
+        else:
+            print(
+                f"[{pdb_id}] No pocket atoms selected "
+                f"(cutoff={cutoff_angstrom:.1f} A).",
+                flush=True,
+            )
 
         # Calculate final ligand force magnitudes
         # This calculates the final force-vector magnitude for each ligand atom.
         lignad_final_force_norms = np.linalg.norm(
             final_force[ligand_indices],
             axis=1,
-        )
+        )    
+    
 
         # Print final energy
         print(f"[{pdb_id}] Final mixed-system energy = {final_energy:.6f} kcal/mol", flush=True)
