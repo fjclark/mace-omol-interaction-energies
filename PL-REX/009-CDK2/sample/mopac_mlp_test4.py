@@ -1146,7 +1146,7 @@ def run_pocket_mlp_optimisation(
         )
 
         # Calculate the energy change
-        energy_delta = initial_energy - final_energy
+        energy_delta = final_energy - initial_energy
 
 
         # Retrieve final positions
