@@ -1456,7 +1456,7 @@ def main(
     auto_model_by_charge: bool = typer.Option(True, "--auto-model-by-charge/--no-auto-model-by-charge", help="Use aceff-2.0 for charged ligands."),
     platform: OpenMMPlatform = typer.Option("CPU", "--platform", help="OpenMM platform."),
     restraint_k: float = typer.Option(DEFAULT_FORCE_CONSTANT, "--restraint-k", min=0.0),
-    max_iterations: int = typer.Option(100, "--max-iterations", min=0),
+    max_iterations: int = typer.Option(1000, "--max-iterations", min=0),
     overwrite_download: bool = typer.Option(False, "--overwrite-download"),
     skip_mopac: bool = typer.Option(False, "--skip-mopac"),
     skip_ligand_mlp: bool = typer.Option(False, "--skip-ligand-mlp"),
