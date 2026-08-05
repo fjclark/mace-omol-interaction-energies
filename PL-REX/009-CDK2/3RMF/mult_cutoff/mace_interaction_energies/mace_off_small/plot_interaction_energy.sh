@@ -11,26 +11,76 @@
 
 set -euo pipefail
 
+
+# ============================================================
+# Purpose
+# ============================================================
+#
+# Plot:
+#
+#   - true 0, 2, 5, 10 and 20 A MLP-relaxed interaction energies
+#   - the original unoptimised interaction energy as a dashed benchmark
+#
+# Default usage:
+#
+#   sbatch plot_interaction_energy.sh
+#
+# Another system:
+#
+#   SYSTEM_ID=3RMF sbatch plot_interaction_energy.sh
+#
+# Another model label:
+#
+#   MODEL_LABEL="MACE-OFF23(msmalledium)" \
+#       sbatch plot_interaction_energy.sh
+# ============================================================
+
+
+# ------------------------------------------------------------
+# Working directory and modules
+# ------------------------------------------------------------
+
 cd "${SLURM_SUBMIT_DIR}"
 
-module purge
+module --force purge
 module load GCC
 
-# Prevent Matplotlib from trying to open a graphical window.
+
+# ------------------------------------------------------------
+# Headless Matplotlib and Pixi cache
+# ------------------------------------------------------------
+
 export MPLBACKEND=Agg
 
-# Use local temporary storage for Pixi cache files.
 export PIXI_CACHE_DIR="${TMPDIR:-/tmp}/pixi-cache-${USER}-${SLURM_JOB_ID}"
+
 mkdir -p "${PIXI_CACHE_DIR}"
 
+
+# ------------------------------------------------------------
+# Paths and labels
+# ------------------------------------------------------------
+
 PIXI="${HOME}/.pixi/bin/pixi"
+
 PIXI_MANIFEST="/nobackup/proj/rockhpc_dccadd/ckn/pocket-mlp/pixi.toml"
 
-# Save your Python plotting code with this filename.
 PYTHON_SCRIPT="${SLURM_SUBMIT_DIR}/plot_interaction_energy.py"
 
-INPUT_CSV="${SLURM_SUBMIT_DIR}/3RMF/results/mace_off_interaction_energies/mace_off_interaction_all_cutoffs.csv"
-OUTPUT_PNG="${SLURM_SUBMIT_DIR}/3RMF/results/mace_off_interaction_energies/interaction_energy_vs_cutoff.png"
+SYSTEM_ID="${SYSTEM_ID:-3RMF}"
+
+MODEL_LABEL="${MODEL_LABEL:-MACE-OFF23(small)}"
+
+RESULTS_DIR="${SLURM_SUBMIT_DIR}/${SYSTEM_ID}/results/mace_off_interaction_energies"
+
+INPUT_CSV="${RESULTS_DIR}/mace_off_interaction_all_structures.csv"
+
+OUTPUT_PNG="${RESULTS_DIR}/interaction_energy_with_unoptimised_benchmark.png"
+
+
+# ------------------------------------------------------------
+# Validate required files
+# ------------------------------------------------------------
 
 if [[ ! -x "${PIXI}" ]]; then
     echo "ERROR: Pixi executable not found: ${PIXI}" >&2
@@ -52,6 +102,11 @@ if [[ ! -f "${INPUT_CSV}" ]]; then
     exit 1
 fi
 
+
+# ------------------------------------------------------------
+# Job information
+# ------------------------------------------------------------
+
 echo "============================================================"
 echo "MACE interaction-energy plotting job"
 echo "============================================================"
@@ -59,22 +114,40 @@ echo "Date:              $(date)"
 echo "Host:              $(hostname)"
 echo "Slurm job ID:      ${SLURM_JOB_ID}"
 echo "Working directory: $(pwd)"
+echo "System ID:         ${SYSTEM_ID}"
+echo "Model label:       ${MODEL_LABEL}"
 echo "Python script:     ${PYTHON_SCRIPT}"
 echo "Input CSV:         ${INPUT_CSV}"
 echo "Output PNG:        ${OUTPUT_PNG}"
 echo "Pixi manifest:     ${PIXI_MANIFEST}"
 echo "============================================================"
 
+
+# ------------------------------------------------------------
+# Run plotting script
+# ------------------------------------------------------------
+
 "${PIXI}" run \
     --manifest-path "${PIXI_MANIFEST}" \
-    python -u "${PYTHON_SCRIPT}"
+    python -u "${PYTHON_SCRIPT}" \
+        --input "${INPUT_CSV}" \
+        --output "${OUTPUT_PNG}" \
+        --model-label "${MODEL_LABEL}"
+
+
+# ------------------------------------------------------------
+# Verify output
+# ------------------------------------------------------------
 
 if [[ -f "${OUTPUT_PNG}" ]]; then
     echo
     echo "Plot created successfully:"
     echo "${OUTPUT_PNG}"
 else
-    echo "ERROR: Python finished, but the expected PNG was not found:" >&2
+    echo \
+        "ERROR: Python finished, but the expected PNG was not found:" \
+        >&2
+
     echo "${OUTPUT_PNG}" >&2
     exit 1
 fi

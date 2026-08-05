@@ -1,8 +1,8 @@
 {
   "complex_pdb_path": "/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/local_results/3RMF/input/complex.pdb",
-  "energy_delta_kcal_per_mol": -1994.1214596287464,
+  "energy_delta_kcal_per_mol": -1990.2950276791817,
   "error_message": null,
-  "final_energy_kcal_per_mol": -359584.57479192695,
+  "final_energy_kcal_per_mol": -359580.7483599774,
   "freeze_backbone": true,
   "initial_energy_kcal_per_mol": -357590.4533322982,
   "ligand_resname": "UNL",
