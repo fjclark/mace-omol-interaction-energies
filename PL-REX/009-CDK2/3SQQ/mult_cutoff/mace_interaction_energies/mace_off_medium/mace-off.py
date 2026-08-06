@@ -550,8 +550,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        default="small",
-        help="MACE-OFF model size/name. Default: small",
+        default="medium",
+        help="MACE-OFF model size/name. Default: medium",
     )
     parser.add_argument(
         "--device",
