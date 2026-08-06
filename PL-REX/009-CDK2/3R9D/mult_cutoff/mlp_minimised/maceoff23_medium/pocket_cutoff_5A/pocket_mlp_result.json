@@ -1,10 +1,10 @@
 {
   "complex_pdb_path": "/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/local_results/3R9D/input/complex.pdb",
-  "energy_delta_kcal_per_mol": -405.1413118248165,
+  "energy_delta_kcal_per_mol": -407.15369143762655,
   "error_message": null,
-  "final_energy_kcal_per_mol": -53796.04170955629,
+  "final_energy_kcal_per_mol": -53798.04599689834,
   "freeze_backbone": true,
-  "initial_energy_kcal_per_mol": -53390.90039773147,
+  "initial_energy_kcal_per_mol": -53390.892305460715,
   "ligand_resname": "UNL",
   "ligand_sdf_path": "/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/local_results/3R9D/input/ligand.sdf",
   "minimisation_max_iterations": 1000,
