@@ -1,0 +1,3 @@
+sdf_path,molecule_index,conformer_index,ml_model,n_rotatable_torsions,restraint_force_constant_kcal_per_mol_rad2,minimisation_max_iterations,openmm_platform,minimised_sdf_path,energy_kcal_per_mol_excluding_restraints
+/home/campus.ncl.ac.uk/c2033567/Documents/3QTU/conformers/conf_7.sdf,0,0,mace-off23-medium,6,100000,0,CUDA,,-4814.08970419279
+/home/campus.ncl.ac.uk/c2033567/Documents/3QTU/07_output.sdf,0,0,mace-off23-medium,6,100000.0,0,CUDA,,-4815.200756024193

@@ -1,0 +1,2 @@
+complex_pdb,receptor_pdb,ligand_sdf,receptor_charge,ligand_charge,receptor_energy_kcal_mol,ligand_energy_kcal_mol,complex_energy_kcal_mol,interaction_energy_kcal_mol
+/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/local_results/3S00/input/complex.pdb,/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/local_results/3S00/input/complex_receptor_only_el_fixed.pdb,/nobackup/proj/rockhpc_dccadd/ckn/mlp/009_cdk2/local_results/3S00/input/ligand.sdf,4,0,-72812801.1031596,-1205989.0892888322,-74018843.02842568,-52.83597723999992

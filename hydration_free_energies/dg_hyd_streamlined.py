@@ -94,7 +94,12 @@ def main():
     print(f"Using {n_processes} processes for parallel processing")
 
     url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/master/database.txt"
-    df = pd.read_csv(url, sep=";", comment="#", header=None)
+    
+    text = requests.get(url).text
+    lines = [line for line in text.splitlines() if not line.lstrip().startswith("#")]
+    df = pd.read_csv(StringIO("\n".join(lines)), sep=";", header=None)
+    
+    # df = pd.read_csv(url, sep=";", comment="#", header=None)
     df.columns = [
         "compound_id",
         "SMILES",
@@ -124,20 +129,29 @@ def main():
     # Prepare data for parallel processing
     row_data = list(df.iterrows())
 
-    # Make sure we don't fork and break CUDA contexts
-    mp.set_start_method("spawn", force=True)
+    # # Make sure we don't fork and break CUDA contexts
+    # mp.set_start_method("spawn", force=True)
 
-    # Process molecules in parallel
-    with mp.Pool(processes=n_processes) as pool:
-        # Use tqdm with pool.imap for progress tracking
-        results_raw = list(
-            tqdm(
-                pool.imap(process_molecule, row_data),
-                total=len(row_data),
-                desc="Processing molecules",
-            )
-        )
+    # # Process molecules in parallel
+    # with mp.Pool(processes=n_processes) as pool:
+    #     # Use tqdm with pool.imap for progress tracking
+    #     results_raw = list(
+    #         tqdm(
+    #             pool.imap(process_molecule, row_data),
+    #             total=len(row_data),
+    #             desc="Processing molecules",
+    #         )
+    #     )
 
+    # Prepare data as list of (idx, row) tuples
+    row_data = list(df.iterrows())
+    
+    results_raw = []
+    for row in tqdm(row_data, desc="Processing molecules"):
+        res = process_molecule(row)
+        results_raw.append(res)
+
+    
     # Filter out None results (failed processing)
     results = [result for result in results_raw if result is not None]
     print(f"Successfully processed {len(results)} out of {len(row_data)} molecules")
